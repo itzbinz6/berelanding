@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion, useScroll, useTransform } from 'motion/react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { StatCounter } from '@/components/ui/stat-counter';
 import { AnimatedSection, AnimatedCard } from '@/components/ui/animated-section';
 import { InteractiveCarousel } from '@/components/ui/interactive-carousel';
+import { useLanguage } from '@/lib/language-context';
 
 // Custom inline SVG icons to bypass deprecated lucide-react brand icons
 const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -32,10 +32,42 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const PROBLEM_IMAGES = [
+  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80',
+];
+
+const SOLUTION_IMAGES = [
+  'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80',
+];
+
+const FRAMEWORK_IMAGES = [
+  'https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=800&q=80',
+];
+
+const MODULE_IMAGES = [
+  'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80',
+];
+
 export default function Home() {
-  const [scrolled, setScrolled] = useState(false);
   const heroImgRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { t } = useLanguage();
 
   // Configure your waitlist and social platform handles here!
   const tallyWaitlistUrl = "https://tally.so/r/7R58GR";
@@ -47,16 +79,8 @@ export default function Home() {
     target: heroImgRef,
     offset: ["start end", "end start"]
   });
-  
-  const heroImageY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 5);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const heroImageY = useTransform(scrollYProgress, [0, 1], ["-15%", "15%"]);
 
   // Safeguard: Force the local video to play automatically if the browser blocks it
   useEffect(() => {
@@ -68,10 +92,10 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-cream text-ink font-sans">
-      
-      {/* Section 2 - Hero with Background Video Loop */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 pb-20 overflow-hidden bg-ink" ref={heroImgRef}>
+    <div className="min-h-screen bg-stone-50 text-stone-900 font-sans">
+
+      {/* Section 1 - Hero with Background Video Loop */}
+      <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 pb-20 overflow-hidden bg-stone-950" ref={heroImgRef}>
         <motion.div style={{ y: heroImageY }} className="absolute inset-[-10%] w-[120%] h-[120%] z-0">
           <div className="relative w-full h-full">
             {/* Our optimized background video loop */}
@@ -84,16 +108,14 @@ export default function Home() {
               preload="auto"
               className="absolute inset-0 w-full h-full object-cover scale-85 opacity-90 transition-opacity duration-1000"
             >
-              {
-              }
               <source src="https://ky8b2ydz75mqe00d.public.blob.vercel-storage.com/hero-loop.mp4" type="video/mp4" />
               Your browser does not support the video tag.
             </video>
           </div>
-          
+
           {/* Visual gradient overlays for contrast and text legibility */}
-          <div className="absolute inset-0 bg-ink/70 sm:bg-ink/60 z-10 transition-colors duration-1000"></div>
-          <motion.div 
+          <div className="absolute inset-0 bg-stone-950/70 sm:bg-stone-950/60 z-10 transition-colors duration-1000"></div>
+          <motion.div
             animate={{ opacity: [0.1, 0.25, 0.1] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             className="absolute inset-0 bg-gradient-to-tr from-terracotta/20 via-transparent to-transparent z-10"
@@ -102,48 +124,40 @@ export default function Home() {
 
         {/* Content container */}
         <div className="relative z-20 w-full max-w-5xl mx-auto px-6 md:px-8 text-center flex flex-col items-center mt-12 md:mt-20">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0 }}
             className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md text-white px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-8 border border-white/20 shadow-xl"
           >
-            <span>AI-Powered</span>
+            <span>{t.hero.badge1}</span>
             <span className="opacity-50">·</span>
-            <span>Built in Africa</span>
+            <span>{t.hero.badge2}</span>
             <span className="opacity-50">·</span>
-            <span>Built for the World</span>
+            <span>{t.hero.badge3}</span>
           </motion.div>
 
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
             className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight mb-8 text-white drop-shadow-lg"
           >
-            9 in 10 <br />
-            startups fail. <br />
-            bẹrẹ changes <span className="text-terracotta">that.</span>
+            {t.hero.h1Line1} <br />
+            {t.hero.h1Line2} <br />
+            {t.hero.h1Line3Pre}<span className="text-terracotta">{t.hero.h1Line3Accent}</span>
           </motion.h1>
 
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="text-lg md:text-2xl text-cream/80 mb-12 max-w-2xl leading-relaxed font-light drop-shadow"
+            className="text-lg md:text-2xl text-stone-200 mb-12 max-w-2xl leading-relaxed font-light drop-shadow"
           >
-            An AI-powered startup intelligence platform that gives Founders the data, the tools, and the intelligence to build businesses that survive, scale, and matter.
+            {t.hero.subtitle}
           </motion.p>
 
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="mb-16 w-full max-w-md px-4 sm:px-0"
-          >
-          </motion.div>
-
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.4 }}
@@ -151,189 +165,97 @@ export default function Home() {
           >
             <div>
               <div className="font-display text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-md"><StatCounter end={90} suffix="%" /></div>
-              <div className="text-xs text-cream/70 uppercase tracking-wider font-semibold drop-shadow-sm">of startups fail globally</div>
+              <div className="text-xs text-stone-300 uppercase tracking-wider font-semibold drop-shadow-sm">{t.hero.stat1Label}</div>
             </div>
             <div>
               <div className="font-display text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-md"><StatCounter end={54} /></div>
-              <div className="text-xs text-cream/70 uppercase tracking-wider font-semibold drop-shadow-sm">African countries in scope</div>
+              <div className="text-xs text-stone-300 uppercase tracking-wider font-semibold drop-shadow-sm">{t.hero.stat2Label}</div>
             </div>
             <div>
               <div className="font-display text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-md"><StatCounter end={7} /></div>
-              <div className="text-xs text-cream/70 uppercase tracking-wider font-semibold drop-shadow-sm">Meridian dimensions</div>
+              <div className="text-xs text-stone-300 uppercase tracking-wider font-semibold drop-shadow-sm">{t.hero.stat3Label}</div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Section 3 - The Problem */}
-      <section id="problem" className="py-16 md:py-24 lg:py-32 bg-ink text-cream">
+      {/* Section 2 - The Problem */}
+      <section id="problem" className="py-24 md:py-32 bg-stone-950 text-stone-50">
         <div className="max-w-7xl mx-auto px-6 md:px-8 text-center">
           <AnimatedSection>
-            <div className="text-sm font-semibold tracking-widest text-terracotta mb-6 uppercase">The Problem</div>
+            <div className="text-sm font-semibold tracking-widest text-terracotta mb-6 uppercase">{t.problem.eyebrow}</div>
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4">
-              Most startups don’t fail because<br className="hidden md:block" /> the idea was bad.
+              {t.problem.heading}
             </h2>
-            <p className="text-2xl md:text-3xl text-ink/40 font-light mb-20">
-              They fail because no one told them what was coming.
+            <p className="text-2xl md:text-3xl text-stone-400 font-light mb-20">
+              {t.problem.subheading}
             </p>
           </AnimatedSection>
 
           <InteractiveCarousel>
-            <AnimatedSection delay={0.08} className="relative bg-white/5 backdrop-blur-sm rounded-2xl border border-cream/10 overflow-hidden group hover:border-cream/20 transition-colors flex flex-col h-full w-full">
-              <div className="absolute inset-0 z-0">
-                <Image src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80" fill className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-700" alt="No Early Warning" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/80 to-ink/20"></div>
-              </div>
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-terracotta/60 opacity-50 group-hover:opacity-100 transition-opacity z-10"></div>
-              <div className="relative z-10 p-5 md:p-8 flex flex-col h-full justify-end text-left">
-                <div className="text-terracotta font-display font-bold text-2xl mb-4">01</div>
-                <h3 className="text-xl md:text-2xl font-bold mb-3 text-white">No Early Warning</h3>
-                <p className="text-cream/60 leading-relaxed text-lg line-clamp-3">
-                  Founders discover critical weaknesses during investor due diligence — when it is already too late to fix them.
-                </p>
-                <Link href="/about" className="inline-flex items-center gap-1 text-terracotta text-sm font-semibold mt-4 hover:gap-2 transition-all duration-200">
-                  Learn more
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </AnimatedSection>
-            <AnimatedSection delay={0.16} className="relative bg-white/5 backdrop-blur-sm rounded-2xl border border-cream/10 overflow-hidden group hover:border-cream/20 transition-colors flex flex-col h-full w-full">
-              <div className="absolute inset-0 z-0">
-                <Image src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=800&q=80" fill className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-700" alt="Wrong Tools" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/80 to-ink/20"></div>
-              </div>
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-terracotta/60 opacity-50 group-hover:opacity-100 transition-opacity z-10"></div>
-              <div className="relative z-10 p-5 md:p-8 flex flex-col h-full justify-end text-left">
-                <div className="text-terracotta font-display font-bold text-2xl mb-4">02</div>
-                <h3 className="text-xl md:text-2xl font-bold mb-3 text-white">Wrong Tools, Wrong Market</h3>
-                <p className="text-cream/60 leading-relaxed text-lg line-clamp-3">
-                  Every major startup tool was designed for Silicon Valley. None account for African realities — regulation, infrastructure, currency, or distribution.
-                </p>
-                <Link href="/about" className="inline-flex items-center gap-1 text-terracotta text-sm font-semibold mt-4 hover:gap-2 transition-all duration-200">
-                  Learn more
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </AnimatedSection>
-            <AnimatedSection delay={0.24} className="relative bg-white/5 backdrop-blur-sm rounded-2xl border border-cream/10 overflow-hidden group hover:border-cream/20 transition-colors flex flex-col h-full w-full">
-              <div className="absolute inset-0 z-0">
-                <Image src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80" fill className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-700" alt="Knowledge Gap" referrerPolicy="no-referrer" />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/80 to-ink/20"></div>
-              </div>
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-terracotta/60 opacity-50 group-hover:opacity-100 transition-opacity z-10"></div>
-              <div className="relative z-10 p-5 md:p-8 flex flex-col h-full justify-end text-left">
-                <div className="text-terracotta font-display font-bold text-2xl mb-4">03</div>
-                <h3 className="text-xl md:text-2xl font-bold mb-3 text-white">The Knowledge Gap</h3>
-                <p className="text-cream/60 leading-relaxed text-lg line-clamp-3">
-                  Investors use proprietary scoring frameworks. Founders walk in blind, get rejected, and never know why.
-                </p>
-                <Link href="/about" className="inline-flex items-center gap-1 text-terracotta text-sm font-semibold mt-4 hover:gap-2 transition-all duration-200">
-                  Learn more
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </AnimatedSection>
+            {t.problem.cards.map((card, i) => (
+              <AnimatedSection
+                key={card.num}
+                delay={0.08 + i * 0.08}
+                className="relative bg-stone-900 rounded-2xl border border-stone-800 overflow-hidden group hover:border-stone-700 transition-colors flex flex-col h-full w-full"
+              >
+                <div className="absolute inset-0 z-0">
+                  <Image
+                    src={PROBLEM_IMAGES[i]}
+                    fill
+                    className="object-cover opacity-20 group-hover:opacity-40 transition-opacity duration-700"
+                    alt={card.title}
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/80 to-stone-900/20"></div>
+                </div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-terracotta/60 opacity-50 group-hover:opacity-100 transition-opacity z-10"></div>
+                <div className="relative z-10 p-8 flex flex-col h-full justify-end text-left">
+                  <div className="text-terracotta font-display font-bold text-2xl mb-4">{card.num}</div>
+                  <h3 className="text-2xl font-bold mb-4 text-white">{card.title}</h3>
+                  <p className="text-stone-400 leading-relaxed text-lg">
+                    {card.desc}
+                  </p>
+                </div>
+              </AnimatedSection>
+            ))}
           </InteractiveCarousel>
         </div>
       </section>
 
-      {/* Section 4 - The Solution */}
-      <section className="py-16 md:py-24 lg:py-32 bg-cream">
+      {/* Section 3 - The Solution */}
+      <section className="py-24 md:py-32 bg-stone-50">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-20">
-            <div className="text-sm font-semibold tracking-widest text-terracotta mb-6 uppercase">The Solution</div>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">Meet bẹrẹ.</h2>
-            <p className="text-xl text-ink/70">
-              The startup intelligence platform that gives every Founder the advantage that only the most well-connected founders currently have.
+            <div className="text-sm font-semibold tracking-widest text-terracotta mb-6 uppercase">{t.solution.eyebrow}</div>
+            <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">{t.solution.heading}</h2>
+            <p className="text-xl text-stone-600">
+              {t.solution.subheading}
             </p>
           </AnimatedSection>
 
           <InteractiveCarousel>
-            <AnimatedCard delay={0.08} className="relative bg-white rounded-2xl border border-ink/10 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full">
-              <div className="relative h-[38%] md:h-[45%] w-full shrink-0 overflow-hidden bg-ink/5">
-                <Image src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" fill className="object-cover transition-transform duration-700 group-hover:scale-105" alt="Intelligence" referrerPolicy="no-referrer" />
-              </div>
-              <div className="relative z-10 p-5 md:p-8 flex flex-col flex-grow bg-white text-left">
-                <div className="text-xs font-bold uppercase tracking-wider text-terracotta mb-4">Intelligence</div>
-                <h3 className="text-2xl font-display font-bold mb-3">The bẹrẹ Risk Profile</h3>
-                <p className="text-ink/70 leading-relaxed text-sm md:text-[15px] line-clamp-3 md:line-clamp-4">
-                  A guided 10-minute assessment across 7 dimensions of startup health. The Meridian Framework evaluates your financial position, market strength, team capability, regulatory standing, product readiness, operational health, and distribution potential — calibrated specifically for African market conditions.
-                </p>
-                <Link href="/platform" className="inline-flex items-center gap-1 text-terracotta text-sm font-semibold mt-auto pt-4 hover:gap-2 transition-all duration-200">
-                  Learn more
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </AnimatedCard>
-            <AnimatedCard delay={0.16} className="relative bg-white rounded-2xl border border-ink/10 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full">
-              <div className="relative h-[38%] md:h-[45%] w-full shrink-0 overflow-hidden bg-ink/5">
-                <Image src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80" fill className="object-cover transition-transform duration-700 group-hover:scale-105" alt="Clarity" referrerPolicy="no-referrer" />
-              </div>
-              <div className="relative z-10 p-5 md:p-8 flex flex-col flex-grow bg-white text-left">
-                <div className="text-xs font-bold uppercase tracking-wider text-terracotta mb-4">Clarity</div>
-                <h3 className="text-2xl font-display font-bold mb-3">Understand What’s Holding You Back</h3>
-                <p className="text-ink/70 leading-relaxed text-sm md:text-[15px] line-clamp-3 md:line-clamp-4">
-                  Get a 0–100 score with plain-English explanations of every number. Know exactly which dimension is dragging your performance down and what you need to do about it — before any investor tells you.
-                </p>
-                <Link href="/platform" className="inline-flex items-center gap-1 text-terracotta text-sm font-semibold mt-auto pt-4 hover:gap-2 transition-all duration-200">
-                  Learn more
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </AnimatedCard>
-            <AnimatedCard delay={0.24} className="relative bg-white rounded-2xl border border-ink/10 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full">
-              <div className="relative h-[38%] md:h-[45%] w-full shrink-0 overflow-hidden bg-ink/5">
-                <Image src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80" fill className="object-cover transition-transform duration-700 group-hover:scale-105" alt="Action" referrerPolicy="no-referrer" />
-              </div>
-              <div className="relative z-10 p-5 md:p-8 flex flex-col flex-grow bg-white text-left">
-                <div className="text-xs font-bold uppercase tracking-wider text-terracotta mb-4">Action</div>
-                <h3 className="text-2xl font-display font-bold mb-3">A Roadmap, Not Just a Report</h3>
-                <p className="text-ink/70 leading-relaxed text-sm md:text-[15px] line-clamp-3 md:line-clamp-4">
-                  Every bẹrẹ assessment produces a prioritised action plan with specific, time-bound steps ranked by the score improvement they will deliver. Download it as a PDF. Share it directly with investors.
-                </p>
-                <Link href="/platform" className="inline-flex items-center gap-1 text-terracotta text-sm font-semibold mt-auto pt-4 hover:gap-2 transition-all duration-200">
-                  Learn more
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </AnimatedCard>
-          </InteractiveCarousel>
-        </div>
-      </section>
-
-      {/* Section 5 - The Meridian Framework */}
-      <section id="framework" className="py-16 md:py-24 lg:py-32 bg-ink/5">
-        <div className="max-w-7xl mx-auto px-6 md:px-8">
-          <AnimatedSection className="mb-16">
-            <div className="text-sm font-semibold tracking-widest text-terracotta mb-6 uppercase">The Meridian Framework</div>
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Seven dimensions of startup intelligence.</h2>
-            <p className="text-lg text-ink/70 max-w-2xl">
-              Traditional VC frameworks cover five domains. The bẹrẹ Meridian Framework goes further.
-            </p>
-          </AnimatedSection>
-
-          <InteractiveCarousel>
-            {[
-              { id: '01', name: 'Financial Risk', desc: 'Can this startup survive long enough to win?', img: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=800&q=80' },
-              { id: '02', name: 'Market Risk', desc: 'Is there a real, winnable market here?', img: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80' },
-              { id: '03', name: 'Team Risk', desc: 'Does this team have what it takes?', img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80' },
-              { id: '04', name: 'Regulatory Risk', desc: 'Will the law let this business scale?', img: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=800&q=80' },
-              { id: '05', name: 'Product & Tech Risk', desc: 'Does the product work at African scale?', img: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80' },
-              { id: '06', name: 'Operational Risk', desc: 'Can this team run the business day-to-day?', img: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80' },
-              { id: '07', name: 'Distribution Risk', desc: 'Can this business reach and grow beyond its current boundaries?', img: 'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=800&q=80' },
-            ].map((dim, i) => (
-              <AnimatedCard key={dim.id} delay={i * 0.08} className="relative bg-white rounded-2xl border border-ink/10 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full">
-                <div className="relative h-[38%] md:h-[45%] w-full shrink-0 overflow-hidden bg-ink/5">
-                  <Image src={dim.img} fill className="object-cover transition-transform duration-700 group-hover:scale-105" alt={dim.name} referrerPolicy="no-referrer" />
+            {t.solution.cards.map((card, i) => (
+              <AnimatedCard
+                key={card.tag}
+                delay={0.08 + i * 0.08}
+                className="relative bg-white rounded-2xl border border-stone-200/80 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full"
+              >
+                <div className="relative h-[45%] w-full shrink-0 overflow-hidden bg-stone-100">
+                  <Image
+                    src={SOLUTION_IMAGES[i]}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    alt={card.title}
+                    referrerPolicy="no-referrer"
+                  />
                 </div>
-                <div className="relative z-10 p-5 md:p-8 flex flex-col flex-grow bg-white text-left">
-                  <div className="text-terracotta font-display font-bold text-2xl mb-2 transition-transform duration-300 group-hover:translate-x-1">{dim.id}</div>
-                  <h3 className="text-xl md:text-2xl font-display font-bold mb-3 text-ink">{dim.name}</h3>
-                  <p className="text-ink/70 text-sm md:text-[15px] leading-relaxed line-clamp-3 md:line-clamp-4">{dim.desc}</p>
-                  <Link href="/platform" className="inline-flex items-center gap-1 text-terracotta text-sm font-semibold mt-auto pt-4 hover:gap-2 transition-all duration-200">
-                    Learn more
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </Link>
+                <div className="relative z-10 p-8 flex flex-col flex-grow bg-white text-left">
+                  <div className="text-xs font-bold uppercase tracking-wider text-terracotta mb-4">{card.tag}</div>
+                  <h3 className="text-2xl font-display font-bold mb-3">{card.title}</h3>
+                  <p className="text-stone-600 leading-relaxed text-[15px]">
+                    {card.desc}
+                  </p>
                 </div>
               </AnimatedCard>
             ))}
@@ -341,48 +263,76 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 6 - Built for Africa */}
-      <section className="py-16 md:py-24 lg:py-32 bg-ink text-white overflow-hidden">
+      {/* Section 4 - The Meridian Framework */}
+      <section id="framework" className="py-24 md:py-32 bg-stone-100">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <AnimatedSection className="mb-16">
+            <div className="text-sm font-semibold tracking-widest text-terracotta mb-6 uppercase">{t.framework.eyebrow}</div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">{t.framework.heading}</h2>
+            <p className="text-lg text-stone-600 max-w-2xl">
+              {t.framework.subheading}
+            </p>
+          </AnimatedSection>
+
+          <InteractiveCarousel>
+            {t.framework.dims.map((dim, i) => (
+              <AnimatedCard key={dim.id} delay={i * 0.08} className="relative bg-white rounded-2xl border border-stone-200/80 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full">
+                <div className="relative h-[45%] w-full shrink-0 overflow-hidden bg-stone-100">
+                  <Image
+                    src={FRAMEWORK_IMAGES[i]}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    alt={dim.name}
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
+                <div className="relative z-10 p-8 flex flex-col flex-grow bg-white text-left">
+                  <div className="text-terracotta font-display font-bold text-2xl mb-2 transition-transform duration-300 group-hover:translate-x-1">{dim.id}</div>
+                  <h3 className="text-2xl font-display font-bold mb-3 text-stone-900">{dim.name}</h3>
+                  <p className="text-stone-600 text-[15px] leading-relaxed">{dim.desc}</p>
+                </div>
+              </AnimatedCard>
+            ))}
+          </InteractiveCarousel>
+        </div>
+      </section>
+
+      {/* Section 5 - Built for Africa */}
+      <section className="py-24 md:py-32 bg-stone-950 text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="flex flex-col-reverse md:flex-row items-center gap-16 lg:gap-24">
             <div className="w-full md:w-1/2 text-left">
               <AnimatedSection>
-                <div className="text-sm font-semibold tracking-widest text-terracotta mb-6 uppercase">Why Africa First?</div>
+                <div className="text-sm font-semibold tracking-widest text-terracotta mb-6 uppercase">{t.africa.eyebrow}</div>
                 <h2 className="font-display text-3xl md:text-5xl font-bold mb-8 leading-tight">
-                  The hardest market to build in produces the most robust tools.
+                  {t.africa.heading}
                 </h2>
-                <div className="space-y-6 text-cream/70 text-lg leading-relaxed mb-12">
-                  <p>
-                    Africa is not a difficult market to build for. It is a complex one — 54 countries, dozens of regulatory frameworks, currency volatility, infrastructure gaps, and the fastest-growing digital population in the world.
-                  </p>
-                  <p>
-                    bẹrẹ was calibrated here because the conventional startup playbook was never written for this environment. A tool built to work honestly in the most complex conditions in the world works everywhere.
-                  </p>
-                  <p className="text-white font-medium">
-                    We are starting in Africa. We are building for the world.
-                  </p>
+                <div className="space-y-6 text-stone-400 text-lg leading-relaxed mb-12">
+                  <p>{t.africa.p1}</p>
+                  <p>{t.africa.p2}</p>
+                  <p className="text-white font-medium">{t.africa.p3}</p>
                 </div>
-                
-                <div className="flex gap-12 border-t border-cream/10 pt-8">
+
+                <div className="flex gap-12 border-t border-stone-800 pt-8">
                   <div>
                     <div className="font-display text-4xl font-bold text-white mb-2"><StatCounter end={54} /></div>
-                    <div className="text-xs text-cream/50 uppercase tracking-wide">African countries in scope</div>
+                    <div className="text-xs text-stone-500 uppercase tracking-wide">{t.africa.stat1Label}</div>
                   </div>
                   <div>
                     <div className="font-display text-4xl font-bold text-white mb-2"><StatCounter end={10} /></div>
-                    <div className="text-xs text-cream/50 uppercase tracking-wide">Startup sectors covered</div>
+                    <div className="text-xs text-stone-500 uppercase tracking-wide">{t.africa.stat2Label}</div>
                   </div>
                 </div>
               </AnimatedSection>
             </div>
-            
+
             <div className="w-full md:w-1/2 mb-12 md:mb-0">
               <AnimatedSection>
-                <div className="relative aspect-square md:aspect-[4/5] w-full rounded-2xl overflow-hidden shadow-2xl border border-cream/10">
-                   <Image 
-                     src="https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" 
-                     alt="African innovation and collaboration" 
-                     fill 
+                <div className="relative aspect-square md:aspect-[4/5] w-full rounded-2xl overflow-hidden shadow-2xl border border-stone-800">
+                   <Image
+                     src="https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                     alt="African innovation and collaboration"
+                     fill
                      className="object-cover"
                      referrerPolicy="no-referrer"
                    />
@@ -393,51 +343,49 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 7 - The Intelligence Suite */}
-      <section id="modules" className="py-16 md:py-24 lg:py-32 bg-cream">
+      {/* Section 6 - The Intelligence Suite */}
+      <section id="modules" className="py-24 md:py-32 bg-stone-50">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <AnimatedSection className="mb-16">
-            <div className="text-sm font-semibold tracking-widest text-terracotta mb-6 uppercase">The bẹrẹ Intelligence Suite</div>
-            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">Everything a founder needs. One platform.</h2>
-            <p className="text-lg text-ink/70 max-w-2xl">
-              The Risk Profile is just the beginning. Seven purpose-built modules. One data foundation.
+            <div className="text-sm font-semibold tracking-widest text-terracotta mb-6 uppercase">{t.modules.eyebrow}</div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">{t.modules.heading}</h2>
+            <p className="text-lg text-stone-600 max-w-2xl">
+              {t.modules.subheading}
             </p>
           </AnimatedSection>
 
           <InteractiveCarousel>
-            {[
-              { name: 'bẹrẹ Risk Profile', desc: 'Your complete startup health assessment across 7 Meridian dimensions. The foundation of everything.', live: true, img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80' },
-              { name: 'Pre-Launch Risk Scan', desc: 'For founders before they have an MVP. Assess what you can control before you build.', live: false, img: 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80' },
-              { name: 'Investment Readiness Score', desc: 'See your startup through an investor’s eyes.', live: false, img: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80' },
-              { name: 'Competitor Benchmarking', desc: 'How do you rank against startups in your sector, country, and stage?', live: false, img: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80' },
-              { name: 'Execution Playbook', desc: 'A dynamic operational roadmap tailored to your industry and location.', live: false, img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80' },
-              { name: 'bẹrẹ Pitch Lab', desc: 'AI-powered pitch simulation. Practice against a calibrated investor before the real meeting.', live: false, img: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80' },
-              { name: 'bẹrẹ Advisor', desc: 'Your AI thinking partner, grounded in your startup data and African ecosystem intelligence.', live: false, img: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80' },
-            ].map((mod, i) => (
-              <AnimatedCard key={i} delay={i * 0.08} className="relative bg-white rounded-2xl border border-ink/10 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full">
-                <div className="relative h-[38%] md:h-[45%] w-full shrink-0 overflow-hidden bg-ink/5">
-                  <Image src={mod.img} fill className="object-cover transition-transform duration-700 group-hover:scale-105" alt={mod.name} referrerPolicy="no-referrer" />
+            {t.modules.mods.map((mod, i) => (
+              <AnimatedCard
+                key={mod.name + i}
+                delay={i * 0.08}
+                className="relative bg-white rounded-2xl border border-stone-200/80 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full"
+              >
+                <div className="relative h-[45%] w-full shrink-0 overflow-hidden bg-stone-100">
+                  <Image
+                    src={MODULE_IMAGES[i]}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    alt={mod.name}
+                    referrerPolicy="no-referrer"
+                  />
                 </div>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-ink/10 to-transparent group-hover:from-terracotta transition-colors duration-500 z-20"></div>
-                <div className="relative z-10 p-5 md:p-8 flex flex-col flex-grow bg-white text-left">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-stone-200 to-transparent group-hover:from-terracotta transition-colors duration-500 z-20"></div>
+                <div className="relative z-10 p-8 flex flex-col flex-grow bg-white text-left">
                   <div className="mb-4 flex justify-between items-start">
                     {mod.live ? (
-                      <span className="inline-flex items-center space-x-1.5 bg-success/10 text-success px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider shadow-sm">
-                        <span className="w-1.5 h-1.5 bg-success rounded-full animate-pulse"></span>
-                        <span>Available Now</span>
+                      <span className="inline-flex items-center space-x-1.5 bg-green-100 text-green-800 px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider shadow-sm">
+                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                        <span>{t.modules.liveBadge}</span>
                       </span>
                     ) : (
-                      <span className="inline-flex items-center space-x-1.5 bg-ink/5 text-ink/50 px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider shadow-sm">
-                        <span>Coming Soon</span>
+                      <span className="inline-flex items-center space-x-1.5 bg-stone-100 text-stone-500 px-3 py-1 rounded-full text-[11px] font-semibold uppercase tracking-wider shadow-sm">
+                        <span>{t.modules.soonBadge}</span>
                       </span>
                     )}
                   </div>
                   <h3 className="text-2xl font-display font-bold mb-3">{mod.name}</h3>
-                  <p className="text-ink/70 text-sm md:text-[15px] leading-relaxed line-clamp-3 md:line-clamp-4">{mod.desc}</p>
-                  <Link href="/platform" className="inline-flex items-center gap-1 text-terracotta text-sm font-semibold mt-auto pt-4 hover:gap-2 transition-all duration-200">
-                    Learn more
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </Link>
+                  <p className="text-stone-600 text-[15px] leading-relaxed">{mod.desc}</p>
                 </div>
               </AnimatedCard>
             ))}
@@ -445,104 +393,104 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 8 - Trust Strip */}
+      {/* Section 7 - Trust Strip */}
       <section className="py-8 bg-terracotta text-white">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-center font-medium tracking-wide">
-            <span>Built in Africa</span>
+            <span>{t.trust.line1}</span>
             <span className="hidden md:block opacity-40">|</span>
-            <span>Built for the World</span>
+            <span>{t.trust.line2}</span>
           </div>
         </div>
       </section>
 
-      {/* Section 9 - Final CTA */}
-      <section id="waitlist" className="py-16 md:py-24 lg:py-32 bg-ink/5 text-center">
+      {/* Section 8 - Final CTA */}
+      <section id="waitlist" className="py-24 md:py-32 bg-stone-100 text-center">
         <div className="max-w-3xl mx-auto px-6 md:px-8">
           <AnimatedSection>
-            <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">Be part of the movement.</h2>
-            <p className="text-xl text-ink/70 mb-10">
-              bẹrẹ is building the infrastructure African founders have always deserved. Join the waitlist and be among the first founders on the platform.
+            <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">{t.cta.heading}</h2>
+            <p className="text-xl text-stone-600 mb-10">
+              {t.cta.subheading}
             </p>
-            
+
             <div className="flex justify-center mb-6 max-w-md mx-auto">
-              <a 
+              <a
                 href={tallyWaitlistUrl}
-                target="_blank" 
+                target="_blank"
                 rel="noopener noreferrer"
-                className="flex flex-col sm:flex-row gap-3 w-full p-2 bg-white border border-ink/10 rounded-xl hover:border-terracotta/50 shadow-md transition-all duration-300 group cursor-pointer text-left"
+                className="flex flex-col sm:flex-row gap-3 w-full p-2 bg-white border border-stone-200 rounded-xl hover:border-terracotta/50 shadow-md transition-all duration-300 group cursor-pointer text-left"
               >
-                <div className="flex-grow px-4 py-3 text-ink/40 text-sm flex items-center bg-transparent">
-                  Enter your email to join the waitlist...
+                <div className="flex-grow px-4 py-3 text-stone-400 text-sm flex items-center bg-transparent">
+                  {t.cta.placeholder}
                 </div>
                 <span className="px-6 py-3 bg-terracotta text-white font-semibold rounded-lg text-sm transition-all duration-300 group-hover:bg-terracotta/90 flex items-center justify-center gap-2 shrink-0">
-                  Join Waitlist
+                  {t.cta.button}
                   <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </span>
               </a>
             </div>
-            
-            <p className="text-sm text-ink/50 flex justify-center items-center gap-2 md:gap-4 flex-wrap">
-              <span>Free to join</span>
+
+            <p className="text-sm text-stone-500 flex justify-center items-center gap-2 md:gap-4 flex-wrap">
+              <span>{t.cta.badge1}</span>
               <span className="hidden md:inline">·</span>
-              <span>No credit card required</span>
+              <span>{t.cta.badge2}</span>
               <span className="hidden md:inline">·</span>
-              <span>Cancel anytime</span>
+              <span>{t.cta.badge3}</span>
             </p>
           </AnimatedSection>
         </div>
       </section>
 
-      {/* Section 10 - Footer */}
-      <footer className="bg-cream border-t border-ink/10 py-12">
+      {/* Section 9 - Footer */}
+      <footer className="bg-stone-50 border-t border-stone-200 py-12">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center mb-12">
             <div className="font-display font-bold text-3xl tracking-tighter mb-6 md:mb-0">bẹrẹ</div>
             <div className="flex space-x-6">
-              <a 
-                href={instagramUrl} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-ink/40 hover:text-ink transition-colors"
+              <a
+                href={instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-stone-400 hover:text-stone-900 transition-colors"
               >
                 <span className="sr-only">Instagram</span>
                 <InstagramIcon className="w-6 h-6" />
               </a>
-              <a 
-                href={xUrl} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-ink/40 hover:text-ink transition-colors"
+              <a
+                href={xUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-stone-400 hover:text-stone-900 transition-colors"
               >
                 <span className="sr-only">X</span>
                 <XIcon className="w-5 h-5 mt-0.5" />
               </a>
-              <a 
-                href={linkedinUrl} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-ink/40 hover:text-ink transition-colors"
+              <a
+                href={linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-stone-400 hover:text-stone-900 transition-colors"
               >
                 <span className="sr-only">LinkedIn</span>
                 <LinkedinIcon className="w-6 h-6" />
               </a>
             </div>
           </div>
-          
-          <div className="flex flex-col md:flex-row justify-between items-center text-sm text-ink/50">
+
+          <div className="flex flex-col md:flex-row justify-between items-center text-sm text-stone-500">
             <div className="mb-4 md:mb-0 text-center md:text-left">
-              The operating system for ambition. <br className="md:hidden" />
-              Built in Africa. Built for the world.
+              {t.footer.tagline1} <br className="md:hidden" />
+              {t.footer.tagline2}
             </div>
             <div className="text-center md:text-right mb-8 md:mb-0">
-              <a href="mailto:contactberehq@gmail.com" className="hover:text-ink transition-colors">
+              <a href="mailto:contactberehq@gmail.com" className="hover:text-stone-900 transition-colors">
                 contactberehq@gmail.com
               </a>
             </div>
           </div>
-          
-          <div className="text-center text-xs text-ink/40 mt-8 pt-8 border-t border-ink/10">
-            © 2026 bẹrẹ. All rights reserved.
+
+          <div className="text-center text-xs text-stone-400 mt-8 pt-8 border-t border-stone-200">
+            {t.footer.copyright}
           </div>
         </div>
       </footer>

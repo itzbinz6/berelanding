@@ -1,27 +1,17 @@
 @import "tailwindcss";
 
 @theme {
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand accent colors — used sparingly as accents only, not full backgrounds */
   --color-cream: #F5EFE6;
   --color-ink: #2C1A0E;
   --color-terracotta: #C8501A;
-
-  --color-success: #16A34A;
-  --color-caution: #EAB308;
-  --color-danger: #DC2626;
-
-  --font-display: var(--font-display);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
 }
 
 html {
   scroll-behavior: smooth;
-}
-
-body {
-  background-color: var(--color-cream);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
 }
 
 @layer utilities {

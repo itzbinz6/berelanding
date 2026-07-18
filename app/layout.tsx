@@ -1,35 +1,32 @@
 import type {Metadata} from 'next';
-import { Syne, DM_Sans, Space_Mono } from 'next/font/google';
+import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/ui/Navbar';
+import { LanguageProvider } from '@/lib/language-context';
 
-const syne = Syne({
-  subsets: ['latin'],
-  variable: '--font-display',
-});
-
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
 });
 
-const spaceMono = Space_Mono({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-mono',
+  variable: '--font-display',
 });
 
 export const metadata: Metadata = {
-  title: 'bẹrẹ | The Operating System for Ambition',
+  title: 'bẹrẹ | AI-Powered Startup Intelligence for Africa',
   description: 'An AI-powered startup intelligence platform that gives African founders the data, tools, and intelligence to build businesses that survive and scale.',
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en" className={`${syne.variable} ${dmSans.variable} ${spaceMono.variable}`}>
-      <body suppressHydrationWarning className="font-sans antialiased bg-cream text-ink">
-        <Navbar />
-        {children}
+    <html lang="en" className={`${inter.variable} ${plusJakarta.variable}`}>
+      <body suppressHydrationWarning className="font-sans antialiased text-stone-900 bg-stone-50 selection:bg-terracotta/20 selection:text-terracotta">
+        <LanguageProvider>
+          <Navbar />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );
