@@ -250,10 +250,10 @@ export default function Home() {
                     referrerPolicy="no-referrer"
                   />
                 </div>
-                <div className="relative z-10 p-8 flex flex-col flex-grow bg-white text-left">
+                <div className="relative z-10 p-10 flex flex-col flex-grow bg-white text-left">
                   <div className="text-xs font-bold uppercase tracking-wider text-terracotta mb-4">{card.tag}</div>
                   <h3 className="text-2xl font-display font-bold mb-3">{card.title}</h3>
-                  <p className="text-stone-600 leading-relaxed text-[15px]">
+                  <p className="text-stone-600 leading-relaxed text-[15px] ">
                     {card.desc}
                   </p>
                 </div>
@@ -286,10 +286,10 @@ export default function Home() {
                     referrerPolicy="no-referrer"
                   />
                 </div>
-                <div className="relative z-10 p-8 flex flex-col flex-grow bg-white text-left">
+                <div className="relative z-10 p-10 flex flex-col flex-grow bg-white text-left ">
                   <div className="text-terracotta font-display font-bold text-2xl mb-2 transition-transform duration-300 group-hover:translate-x-1">{dim.id}</div>
                   <h3 className="text-2xl font-display font-bold mb-3 text-stone-900">{dim.name}</h3>
-                  <p className="text-stone-600 text-[15px] leading-relaxed">{dim.desc}</p>
+                  <p className="text-stone-600 text-[15px] leading-relaxed ">{dim.desc}</p>
                 </div>
               </AnimatedCard>
             ))}

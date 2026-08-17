@@ -43,7 +43,7 @@ export function InteractiveCarousel({ children, className = '' }: InteractiveCar
 
   return (
     <div className={`relative w-full overflow-hidden py-8 md:py-12 ${className}`} ref={containerRef}>
-      <div className="relative h-[520px] md:h-[580px] w-full flex items-center justify-center cursor-grab active:cursor-grabbing">
+      <div className="relative h-[680px] md:h-[600px] w-full flex items-center justify-center cursor-grab active:cursor-grabbing">
         {items.map((item, index) => {
           const position = getPosition(index);
 
