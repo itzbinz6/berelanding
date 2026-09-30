@@ -6,10 +6,12 @@ export const translations = {
       home: 'Home',
       why: 'About',
       framework: 'Platform',
-      modules: 'Modules',
+      modules: 'Suite',
       cta: 'Join the Waitlist',
     },
-    hero: {
+
+    // Hero Section
+    home: {
       badge1: 'AI-Powered',
       badge2: 'Built in Africa',
       badge3: 'Built for the World',
@@ -23,6 +25,8 @@ export const translations = {
       stat2Label: 'African countries in scope',
       stat3Label: 'Meridian dimensions',
     },
+
+    // Poblem Section
     problem: {
       eyebrow: 'The Problem',
       heading: 'Most startups don\u2019t fail because the idea was bad.',
@@ -45,6 +49,8 @@ export const translations = {
         },
       ],
     },
+
+    // Solution section
     solution: {
       eyebrow: 'The Solution',
       heading: 'Meet bẹrẹ.',
@@ -68,6 +74,8 @@ export const translations = {
         },
       ],
     },
+
+    // Framework Sections
     framework: {
       eyebrow: 'The Meridian Framework',
       heading: 'Seven dimensions of startup intelligence.',
@@ -91,6 +99,8 @@ export const translations = {
       stat1Label: 'African countries in scope',
       stat2Label: 'Startup sectors covered',
     },
+
+    // Modules Section
     modules: {
       eyebrow: 'The bẹrẹ Intelligence Suite',
       heading: 'Everything a founder needs. One platform.',
@@ -139,6 +149,8 @@ export const translations = {
       line1: 'Built in Africa',
       line2: 'Built for the World',
     },
+
+    // CTA section
     cta: {
       heading: 'Be part of the movement.',
       subheading:
@@ -149,6 +161,8 @@ export const translations = {
       badge2: 'No credit card required',
       badge3: 'Cancel anytime',
     },
+
+    // Footer
     footer: {
       tagline1: 'The operating system for ambition.',
       tagline2: 'Built in Africa. Built for the world.',
@@ -156,14 +170,18 @@ export const translations = {
     },
   },
   fr: {
+
+    // Navbar for french
     nav: {
       home: 'Accueil',
       why: 'À propos',
       framework: 'Plateforme',
-      modules: 'Modules',
+      modules: 'Suite',
       cta: 'Rejoindre la liste d\u2019attente',
     },
-    hero: {
+
+    // Hero sections
+    home: {
       badge1: 'Propulsé par l\u2019IA',
       badge2: 'Conçu en Afrique',
       badge3: 'Conçu pour le monde',
@@ -177,6 +195,8 @@ export const translations = {
       stat2Label: 'pays africains couverts',
       stat3Label: 'dimensions Meridian',
     },
+
+    // Problem section
     problem: {
       eyebrow: 'Le Problème',
       heading: 'La plupart des startups n\u2019échouent pas parce que l\u2019idée était mauvaise.',
@@ -199,6 +219,8 @@ export const translations = {
         },
       ],
     },
+
+    // Solution section
     solution: {
       eyebrow: 'La Solution',
       heading: 'Découvrez bẹrẹ.',
@@ -222,6 +244,8 @@ export const translations = {
         },
       ],
     },
+
+    // Framework section
     framework: {
       eyebrow: 'Le Cadre Meridian',
       heading: 'Sept dimensions de l\u2019intelligence entrepreneuriale.',
@@ -245,6 +269,8 @@ export const translations = {
       stat1Label: 'pays africains couverts',
       stat2Label: 'secteurs de startups couverts',
     },
+
+    // Modules section
     modules: {
       eyebrow: 'La Suite d\u2019Intelligence bẹrẹ',
       heading: 'Tout ce dont un fondateur a besoin. Une seule plateforme.',
@@ -293,6 +319,8 @@ export const translations = {
       line1: 'Conçu en Afrique',
       line2: 'Conçu pour le monde',
     },
+
+    // CTA section
     cta: {
       heading: 'Faites partie du mouvement.',
       subheading:
@@ -303,6 +331,8 @@ export const translations = {
       badge2: 'Aucune carte bancaire requise',
       badge3: 'Annulez à tout moment',
     },
+
+    // Footer section
     footer: {
       tagline1: 'Le système d\u2019exploitation de l\u2019ambition.',
       tagline2: 'Conçu en Afrique. Conçu pour le monde.',

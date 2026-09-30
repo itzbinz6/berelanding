@@ -95,7 +95,7 @@ export default function Home() {
     <div className="min-h-screen bg-stone-50 text-stone-900 font-sans">
 
       {/* Section 1 - Hero with Background Video Loop */}
-      <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 pb-20 overflow-hidden bg-stone-950" ref={heroImgRef}>
+      <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 pb-20 overflow-hidden bg-stone-950" ref={heroImgRef}>
         <motion.div style={{ y: heroImageY }} className="absolute inset-[-10%] w-[120%] h-[120%] z-0">
           <div className="relative w-full h-full">
             {/* Our optimized background video loop */}
@@ -130,11 +130,11 @@ export default function Home() {
             transition={{ duration: 0.4, delay: 0 }}
             className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md text-white px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider mb-8 border border-white/20 shadow-xl"
           >
-            <span>{t.hero.badge1}</span>
+            <span>{t.home.badge1}</span>
             <span className="opacity-50">·</span>
-            <span>{t.hero.badge2}</span>
+            <span>{t.home.badge2}</span>
             <span className="opacity-50">·</span>
-            <span>{t.hero.badge3}</span>
+            <span>{t.home.badge3}</span>
           </motion.div>
 
           <motion.h1
@@ -143,9 +143,9 @@ export default function Home() {
             transition={{ duration: 0.4, delay: 0.1 }}
             className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tight mb-8 text-white drop-shadow-lg"
           >
-            {t.hero.h1Line1} <br />
-            {t.hero.h1Line2} <br />
-            {t.hero.h1Line3Pre}<span className="text-terracotta">{t.hero.h1Line3Accent}</span>
+            {t.home.h1Line1} <br />
+            {t.home.h1Line2} <br />
+            {t.home.h1Line3Pre}<span className="text-terracotta">{t.home.h1Line3Accent}</span>
           </motion.h1>
 
           <motion.p
@@ -154,7 +154,7 @@ export default function Home() {
             transition={{ duration: 0.4, delay: 0.2 }}
             className="text-lg md:text-2xl text-stone-200 mb-12 max-w-2xl leading-relaxed font-light drop-shadow"
           >
-            {t.hero.subtitle}
+            {t.home.subtitle}
           </motion.p>
 
           <motion.div
@@ -165,15 +165,15 @@ export default function Home() {
           >
             <div>
               <div className="font-display text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-md"><StatCounter end={90} suffix="%" /></div>
-              <div className="text-xs text-stone-300 uppercase tracking-wider font-semibold drop-shadow-sm">{t.hero.stat1Label}</div>
+              <div className="text-xs text-stone-300 uppercase tracking-wider font-semibold drop-shadow-sm">{t.home.stat1Label}</div>
             </div>
             <div>
               <div className="font-display text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-md"><StatCounter end={54} /></div>
-              <div className="text-xs text-stone-300 uppercase tracking-wider font-semibold drop-shadow-sm">{t.hero.stat2Label}</div>
+              <div className="text-xs text-stone-300 uppercase tracking-wider font-semibold drop-shadow-sm">{t.home.stat2Label}</div>
             </div>
             <div>
               <div className="font-display text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-md"><StatCounter end={7} /></div>
-              <div className="text-xs text-stone-300 uppercase tracking-wider font-semibold drop-shadow-sm">{t.hero.stat3Label}</div>
+              <div className="text-xs text-stone-300 uppercase tracking-wider font-semibold drop-shadow-sm">{t.home.stat3Label}</div>
             </div>
           </motion.div>
         </div>
@@ -224,7 +224,7 @@ export default function Home() {
       </section>
 
       {/* Section 3 - The Solution */}
-      <section className="py-24 md:py-32 bg-stone-50">
+      <section id="solution" className="py-24 md:py-32 bg-stone-50">
         <div className="max-w-7xl mx-auto px-6 md:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-20">
             <div className="text-sm font-semibold tracking-widest text-terracotta mb-6 uppercase">{t.solution.eyebrow}</div>
@@ -239,9 +239,9 @@ export default function Home() {
               <AnimatedCard
                 key={card.tag}
                 delay={0.08 + i * 0.08}
-                className="relative bg-white rounded-2xl border border-stone-200/80 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full"
+                className="relative bg-white rounded-2xl border border-stone-200/80 shadow-sm sm:shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full"
               >
-                <div className="relative h-[45%] w-full shrink-0 overflow-hidden bg-stone-100">
+                <div className="relative h-[40%] sm:h-[42%] md:h-[45%] w-full shrink-0 overflow-hidden bg-stone-100">
                   <Image
                     src={SOLUTION_IMAGES[i]}
                     fill
@@ -250,10 +250,10 @@ export default function Home() {
                     referrerPolicy="no-referrer"
                   />
                 </div>
-                <div className="relative z-10 p-10 flex flex-col flex-grow bg-white text-left">
-                  <div className="text-xs font-bold uppercase tracking-wider text-terracotta mb-4">{card.tag}</div>
-                  <h3 className="text-2xl font-display font-bold mb-3">{card.title}</h3>
-                  <p className="text-stone-600 leading-relaxed text-[15px] ">
+                <div className="relative z-10 p-5 sm:p-6 md:p-8 flex flex-col flex-grow bg-white text-left">
+                  <div className="text-xs font-bold uppercase tracking-wider text-terracotta mb-3 md:mb-4">{card.tag}</div>
+                  <h3 className="text-[1.4rem] sm:text-2xl font-display font-bold leading-tight mb-3">{card.title}</h3>
+                  <p className="text-stone-600 leading-[1.65] text-[15px]">
                     {card.desc}
                   </p>
                 </div>

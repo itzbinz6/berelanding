@@ -11,7 +11,7 @@ interface StatCounterProps {
 export function StatCounter({ end, duration = 1500, suffix = "" }: StatCounterProps) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, margin: "0px" });
 
   useEffect(() => {
     if (isInView) {

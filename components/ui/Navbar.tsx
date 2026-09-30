@@ -19,8 +19,8 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: t.nav.home, href: '#hero' },
-    { label: t.nav.why, href: '#problem' },
+    { label: t.nav.home, href: '#home' },
+    { label: t.nav.why, href: '#solution' },
     { label: t.nav.framework, href: '#framework' },
     { label: t.nav.modules, href: '#modules' },
   ];
