@@ -46,12 +46,12 @@ const SOLUTION_IMAGES = [
 
 const FRAMEWORK_IMAGES = [
   'https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80',
+  'https://images.pexels.com/photos/36827827/pexels-photo-36827827.jpeg',
   'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&w=800&q=80',
+  'https://images.pexels.com/photos/5510476/pexels-photo-5510476.jpeg',
   'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?auto=format&fit=crop&w=800&q=80',
+  'https://images.pexels.com/photos/8989470/pexels-photo-8989470.jpeg',
 ];
 
 const MODULE_IMAGES = [

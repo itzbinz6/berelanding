@@ -5,7 +5,7 @@ export const translations = {
     nav: {
       home: 'Home',
       why: 'About',
-      framework: 'Platform',
+      framework: 'Framework',
       modules: 'Suite',
       cta: 'Join the Waitlist',
     },
@@ -175,7 +175,7 @@ export const translations = {
     nav: {
       home: 'Accueil',
       why: 'À propos',
-      framework: 'Plateforme',
+      framework: 'Framework',
       modules: 'Suite',
       cta: 'Rejoindre la liste d\u2019attente',
     },
