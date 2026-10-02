@@ -60,7 +60,7 @@ const MODULE_IMAGES = [
   'https://images.pexels.com/photos/39219934/pexels-photo-39219934.jpeg ',
   'https://images.pexels.com/photos/9432625/pexels-photo-9432625.jpeg ',
   'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
-  'https://images.pexels.com/photos/8555678/pexels-photo-8555678.jpeg ',
+  'https://images.pexels.com/photos/8555678/pexels-photo-8555678.jpeg',
   'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80',
 ];
 
