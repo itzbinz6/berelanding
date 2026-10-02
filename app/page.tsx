@@ -32,6 +32,7 @@ const LinkedinIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+
 const PROBLEM_IMAGES = [
   'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=800&q=80',
@@ -94,6 +95,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 font-sans">
 
+
       {/* Section 1 - Hero with Background Video Loop */}
       <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 pb-20 overflow-hidden bg-stone-950" ref={heroImgRef}>
         <motion.div style={{ y: heroImageY }} className="absolute inset-[-10%] w-[120%] h-[120%] z-0">
@@ -119,6 +121,7 @@ export default function Home() {
             animate={{ opacity: [0.1, 0.25, 0.1] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             className="absolute inset-0 bg-gradient-to-tr from-terracotta/20 via-transparent to-transparent z-10"
+
           ></motion.div>
         </motion.div>
 
@@ -165,6 +168,7 @@ export default function Home() {
           >
             <div>
               <div className="font-display text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-md"><StatCounter end={90} suffix="%" /></div>
+
               <div className="text-xs text-stone-300 uppercase tracking-wider font-semibold drop-shadow-sm">{t.home.stat1Label}</div>
             </div>
             <div>
@@ -325,7 +329,6 @@ export default function Home() {
                 </div>
               </AnimatedSection>
             </div>
-
             <div className="w-full md:w-1/2 mb-12 md:mb-0">
               <AnimatedSection>
                 <div className="relative aspect-square md:aspect-[4/5] w-full rounded-2xl overflow-hidden shadow-2xl border border-stone-800">
@@ -429,7 +432,6 @@ export default function Home() {
                 </span>
               </a>
             </div>
-
             <p className="text-sm text-stone-500 flex justify-center items-center gap-2 md:gap-4 flex-wrap">
               <span>{t.cta.badge1}</span>
               <span className="hidden md:inline">·</span>
@@ -476,7 +478,6 @@ export default function Home() {
               </a>
             </div>
           </div>
-
           <div className="flex flex-col md:flex-row justify-between items-center text-sm text-stone-500">
             <div className="mb-4 md:mb-0 text-center md:text-left">
               {t.footer.tagline1} <br className="md:hidden" />

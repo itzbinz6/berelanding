@@ -297,6 +297,7 @@ export function InteractiveCarousel({
   };
 
   const getPosition = (index: number) => {
+
     const half = Math.floor(length / 2);
     let diff = (index - currentIndex) % length;
 
@@ -328,7 +329,6 @@ export function InteractiveCarousel({
           let scale = 1;
           let opacity = 1;
           let zIndex = 10;
-
           if (position === 0) {
             x = 0;
             scale = 1;
