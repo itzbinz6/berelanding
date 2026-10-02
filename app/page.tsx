@@ -41,26 +41,26 @@ const PROBLEM_IMAGES = [
 const SOLUTION_IMAGES = [
   'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80',
+  'https://images.pexels.com/photos/9301901/pexels-photo-9301901.jpeg ',
 ];
 
 const FRAMEWORK_IMAGES = [
   'https://images.unsplash.com/photo-1553729459-efe14ef6055d?auto=format&fit=crop&w=800&q=80',
-  'https://images.pexels.com/photos/36827827/pexels-photo-36827827.jpeg',
-  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
-  'https://images.pexels.com/photos/5510476/pexels-photo-5510476.jpeg',
+  'https://images.pexels.com/photos/36827827/pexels-photo-36827827.jpeg ',
+  'https://images.pexels.com/photos/9433170/pexels-photo-9433170.jpeg ',
+  'https://images.pexels.com/photos/5510476/pexels-photo-5510476.jpeg ',
   'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80',
-  'https://images.pexels.com/photos/8989470/pexels-photo-8989470.jpeg',
+  'https://images.pexels.com/photos/5453822/pexels-photo-5453822.jpeg ',
+  'https://images.pexels.com/photos/8989470/pexels-photo-8989470.jpeg ',
 ];
 
 const MODULE_IMAGES = [
   'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
   'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=800&q=80',
+  'https://images.pexels.com/photos/39219934/pexels-photo-39219934.jpeg ',
+  'https://images.pexels.com/photos/9432625/pexels-photo-9432625.jpeg ',
   'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80',
+  'https://images.pexels.com/photos/8555678/pexels-photo-8555678.jpeg ',
   'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&w=800&q=80',
 ];
 
