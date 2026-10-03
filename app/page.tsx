@@ -35,6 +35,7 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const heroImgRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { t } = useLanguage();
 
   // Configure your waitlist and social platform handles here!
   const tallyWaitlistUrl = "https://tally.so/r/7R58GR";
@@ -535,4 +536,8 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+function useLanguage(): { t: any; } {
+  throw new Error('Function not implemented.');
 }
