@@ -292,7 +292,7 @@ export default function Home() {
                 </div>
                 <div className="relative z-10 p-5 md:p-8 lg:p-10 flex flex-col flex-grow bg-white text-left ">
                   <div className="text-terracotta font-display font-bold text-2xl mb-2 transition-transform duration-300 group-hover:translate-x-1">{dim.id}</div>
-                  <h3 className="text-xl md:text-xl md:text-2xl font-display font-bold mb-3 text-stone-900">{dim.name}</h3>
+                  <h3 className="text-xl md:text-xl font-display font-bold mb-3 text-stone-900">{dim.name}</h3>
                   <p className="text-stone-600 text-[15px] leading-relaxed line-clamp-4 md:line-clamp-none ">{dim.desc}</p>
                 </div>
               </AnimatedCard>
