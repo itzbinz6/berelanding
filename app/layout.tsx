@@ -1,6 +1,8 @@
 import type {Metadata} from 'next';
 import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
+import Navbar from '@/components/ui/Navbar';
+import { LanguageProvider } from '@/lib/language-context';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -20,8 +22,11 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en" className={`${inter.variable} ${plusJakarta.variable}`}>
-      <body suppressHydrationWarning className="font-sans antialiased text-stone-900 bg-stone-50 selection:bg-orange-200 selection:text-orange-900">
-        {children}
+      <body suppressHydrationWarning className="font-sans antialiased text-stone-900 bg-stone-50 selection:bg-terracotta/20 selection:text-terracotta">
+        <LanguageProvider>
+          <Navbar />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

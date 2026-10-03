@@ -3,6 +3,10 @@
 @theme {
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  /* Brand accent colors — used sparingly as accents only, not full backgrounds */
+  --color-cream: #F5EFE6;
+  --color-ink: #2C1A0E;
+  --color-terracotta: #C8501A;
 }
 
 html {
