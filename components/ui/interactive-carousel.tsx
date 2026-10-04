@@ -16,10 +16,16 @@ interface InteractiveCarouselProps {
   className?: string;
 }
 
+type Direction = 'prev' | 'next';
+
 const SLIDE_MS = 600;
 const AUTOPLAY_MS = 7000;
 const SWIPE_DISTANCE = 50;
 const SWIPE_VELOCITY = 500;
+
+// Scale of the cards sitting behind the active one. Keep in sync with the
+// `scale` used for position -1 / +1 below.
+const SIDE_SCALE = 0.85;
 
 export function InteractiveCarousel({
   children,
@@ -29,20 +35,22 @@ export function InteractiveCarousel({
   const length = items.length;
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [hoveredCardIndex, setHoveredCardIndex] = useState<number | null>(null);
-  const [cursorDirection, setCursorDirection] = useState<'prev' | 'next'>('next');
   const [isDragging, setIsDragging] = useState(false);
 
-  // One set of motion values is enough because the pill belongs to the card
-  // currently under the pointer. Its coordinates are recalculated from that
-  // card's own bounding rect on every move.
-  const cursorX = useMotionValue(0);
-  const cursorY = useMotionValue(0);
-  const smoothCursorX = useSpring(cursorX, { damping: 28, stiffness: 420 });
-  const smoothCursorY = useSpring(cursorY, { damping: 28, stiffness: 420 });
+  // null = pointer is not over any card, so the Next/Prev pill is hidden.
+  const [pillDirection, setPillDirection] = useState<Direction | null>(null);
 
-  const lastPointerRef = useRef({ x: -9999, y: -9999 });
+  const stageRef = useRef<HTMLDivElement>(null);
+  const slotRef = useRef<HTMLDivElement>(null);
   const didDragRef = useRef(false);
+
+  // ONE pill for the whole carousel. It is positioned relative to the stage
+  // (which never moves), so it can never get stuck on a card that is sliding
+  // away. The spring only smooths the pill's own movement.
+  const pillX = useMotionValue(0);
+  const pillY = useMotionValue(0);
+  const smoothPillX = useSpring(pillX, { damping: 45, stiffness: 650 });
+  const smoothPillY = useSpring(pillY, { damping: 45, stiffness: 650 });
 
   const isDesktop = () =>
     typeof window !== 'undefined' && window.innerWidth >= 768;
@@ -63,8 +71,8 @@ export function InteractiveCarousel({
     }
   }, [length, currentIndex]);
 
-  // Pause autoplay while the user is interacting with a card.
-  const isPaused = hoveredCardIndex !== null || isDragging;
+  // Pause autoplay while the pointer is over the carousel or while dragging.
+  const isPaused = pillDirection !== null || isDragging;
 
   useEffect(() => {
     if (length <= 1 || isPaused) return;
@@ -73,86 +81,115 @@ export function InteractiveCarousel({
     return () => window.clearTimeout(timer);
   }, [length, currentIndex, isPaused, goToNext]);
 
-  // Keep the latest physical pointer position. This lets the newly active
-  // card immediately take over the hover pill when the pointer stays still
-  // while the carousel advances.
-  useEffect(() => {
-    const handlePointerMove = (event: PointerEvent) => {
-      lastPointerRef.current = {
-        x: event.clientX,
-        y: event.clientY,
-      };
-    };
+  const getPosition = (index: number) => {
+    const half = Math.floor(length / 2);
+    let diff = (index - currentIndex) % length;
 
-    window.addEventListener('pointermove', handlePointerMove);
-    return () => window.removeEventListener('pointermove', handlePointerMove);
-  }, []);
+    if (diff < -half) diff += length;
+    if (diff > half) diff -= length;
+
+    return diff;
+  };
 
   /*
-   * After a slide finishes, determine which card is now under the cursor.
-   * This is deliberately NOT tied to one "primary card" ref. Every rendered
-   * card can become the hovered/active interaction target.
+   * Works out what is under the pointer using the FINAL, fixed layout of the
+   * three visible slots (left / centre / right), not the on-screen position of
+   * cards that may still be mid-animation. This is what keeps the pill (and
+   * click direction) correct during and right after a slide.
+   *
+   * The side offset is read from the same CSS variable that positions the
+   * cards, so CSS stays the single source of truth for desktop vs mobile.
    */
-  useEffect(() => {
-    if (!isDesktop() || length <= 1) {
-      setHoveredCardIndex(null);
+  const hitTest = (clientX: number, clientY: number) => {
+    const stage = stageRef.current;
+    const slot = slotRef.current;
+    if (!stage || !slot || length <= 1) return null;
+
+    const rect = stage.getBoundingClientRect();
+    const cardW = slot.offsetWidth; // layout size, unaffected by transforms
+    const cardH = slot.offsetHeight;
+    const sideOffset =
+      (parseFloat(
+        getComputedStyle(stage).getPropertyValue('--carousel-offset')
+      ) || 100) / 100;
+
+    const dx = clientX - (rect.left + rect.width / 2);
+    const dy = clientY - (rect.top + rect.height / 2);
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    // Centre (active) card: left half = previous, right half = next.
+    if (Math.abs(dx) <= cardW / 2 && Math.abs(dy) <= cardH / 2) {
+      return { zone: 'center' as const, direction: (dx < 0 ? 'prev' : 'next') as Direction, x, y };
+    }
+
+    // Cards sitting behind the active one.
+    const sideHalfW = (cardW * SIDE_SCALE) / 2;
+    const sideHalfH = (cardH * SIDE_SCALE) / 2;
+    if (Math.abs(dy) <= sideHalfH) {
+      const hasRight = items.some((_, i) => getPosition(i) === 1);
+      const hasLeft = items.some((_, i) => getPosition(i) === -1);
+
+      if (hasRight && Math.abs(dx - cardW * sideOffset) <= sideHalfW) {
+        return { zone: 'side' as const, direction: 'next' as Direction, x, y };
+      }
+      if (hasLeft && Math.abs(dx + cardW * sideOffset) <= sideHalfW) {
+        return { zone: 'side' as const, direction: 'prev' as Direction, x, y };
+      }
+    }
+
+    return null;
+  };
+
+  const updatePill = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDesktop() || isDragging) {
+      setPillDirection(null);
       return;
     }
 
-    const timer = window.setTimeout(() => {
-      const { x: px, y: py } = lastPointerRef.current;
+    const hit = hitTest(event.clientX, event.clientY);
+    if (!hit) {
+      setPillDirection(null);
+      return;
+    }
 
-      // Find the visible card whose actual DOM rectangle contains the cursor.
-      const cards = Array.from(
-        document.querySelectorAll<HTMLElement>('[data-interactive-carousel-card]')
-      );
+    // Appearing from hidden: snap to the pointer instead of flying in from
+    // wherever the pill was last seen.
+    if (pillDirection === null) {
+      smoothPillX.jump(hit.x);
+      smoothPillY.jump(hit.y);
+    }
+    pillX.set(hit.x);
+    pillY.set(hit.y);
+    setPillDirection(hit.direction);
+  };
 
-      let foundIndex: number | null = null;
+  const handleStageClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (didDragRef.current) return;
 
-      cards.forEach((card) => {
-        const index = Number(card.dataset.carouselIndex);
-        const rect = card.getBoundingClientRect();
+    // Never hijack links, buttons or anything marked to be ignored.
+    const target = event.target as HTMLElement;
+    if (
+      target.closest('a, button, input, textarea, select, [data-carousel-ignore]')
+    ) {
+      return;
+    }
 
-        if (
-          rect.width > 0 &&
-          rect.height > 0 &&
-          px >= rect.left &&
-          px <= rect.right &&
-          py >= rect.top &&
-          py <= rect.bottom
-        ) {
-          foundIndex = index;
-        }
-      });
+    const hit = hitTest(event.clientX, event.clientY);
+    if (!hit) return;
 
-      setHoveredCardIndex(foundIndex);
+    // Mobile: tapping the centre card does nothing, tapping a card behind it
+    // brings it forward. Desktop: the pill's direction decides.
+    if (!isDesktop() && hit.zone === 'center') return;
 
-      if (foundIndex !== null) {
-        const card = cards.find(
-          (el) => Number(el.dataset.carouselIndex) === foundIndex
-        );
-
-        if (card) {
-          const rect = card.getBoundingClientRect();
-          const x = Math.max(0, Math.min(rect.width, px - rect.left));
-          const y = Math.max(0, Math.min(rect.height, py - rect.top));
-
-          cursorX.set(x);
-          cursorY.set(y);
-          smoothCursorX.jump(x);
-          smoothCursorY.jump(y);
-          setCursorDirection(x < rect.width / 2 ? 'prev' : 'next');
-        }
-      }
-    }, SLIDE_MS + 50);
-
-    return () => window.clearTimeout(timer);
-  }, [currentIndex, length, cursorX, cursorY, smoothCursorX, smoothCursorY]);
+    if (hit.direction === 'prev') goToPrevious();
+    else goToNext();
+  };
 
   const handleDragStart = () => {
     didDragRef.current = false;
     setIsDragging(true);
-    setHoveredCardIndex(null);
+    setPillDirection(null);
   };
 
   const handleDrag = (
@@ -184,108 +221,6 @@ export function InteractiveCarousel({
     }, 0);
   };
 
-  /*
-   * Every visible card gets its own hover target.
-   *
-   * This is the key change: the pill is no longer rendered only inside the
-   * first/primary card. When a different card becomes the card under the
-   * pointer, that card owns the pill and the coordinates are calculated from
-   * THAT card's rectangle.
-   */
-  const handleCardMouseEnter = (
-    event: React.MouseEvent<HTMLDivElement>,
-    index: number,
-  ) => {
-    if (!isDesktop() || length <= 1) return;
-
-    lastPointerRef.current = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = Math.max(0, Math.min(rect.width, event.clientX - rect.left));
-    const y = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
-
-    cursorX.set(x);
-    cursorY.set(y);
-    smoothCursorX.jump(x);
-    smoothCursorY.jump(y);
-    setCursorDirection(x < rect.width / 2 ? 'prev' : 'next');
-    setHoveredCardIndex(index);
-  };
-
-  const handleCardMouseMove = (
-    event: React.MouseEvent<HTMLDivElement>,
-    index: number,
-  ) => {
-    if (!isDesktop() || length <= 1) return;
-
-    lastPointerRef.current = {
-      x: event.clientX,
-      y: event.clientY,
-    };
-
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = Math.max(0, Math.min(rect.width, event.clientX - rect.left));
-    const y = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
-
-    cursorX.set(x);
-    cursorY.set(y);
-    setCursorDirection(x < rect.width / 2 ? 'prev' : 'next');
-
-    if (hoveredCardIndex !== index) {
-      setHoveredCardIndex(index);
-    }
-  };
-
-  const handleCardMouseLeave = (index: number) => {
-    if (hoveredCardIndex === index) {
-      setHoveredCardIndex(null);
-    }
-  };
-
-  /*
-   * Clicking any visible card:
-   * - side card -> bring that card to the center
-   * - current/center card -> left half prev, right half next
-   * - links/buttons inside cards are not hijacked
-   */
-  const handleCardClick = (
-    event: React.MouseEvent<HTMLDivElement>,
-    index: number,
-    position: number,
-  ) => {
-    if (didDragRef.current) return;
-
-    const target = event.target as HTMLElement;
-    if (
-      target.closest(
-        'a, button, input, textarea, select, [data-carousel-ignore]'
-      )
-    ) {
-      return;
-    }
-
-    if (position !== 0) {
-      if (Math.abs(position) === 1) {
-        setCurrentIndex(index);
-      }
-      return;
-    }
-
-    if (!isDesktop() || length <= 1) return;
-
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-
-    if (x < rect.width / 2) {
-      goToPrevious();
-    } else {
-      goToNext();
-    }
-  };
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'ArrowLeft') {
       event.preventDefault();
@@ -296,51 +231,51 @@ export function InteractiveCarousel({
     }
   };
 
-  const getPosition = (index: number) => {
-
-    const half = Math.floor(length / 2);
-    let diff = (index - currentIndex) % length;
-
-    if (diff < -half) diff += length;
-    if (diff > half) diff -= length;
-
-    return diff;
-  };
-
   if (length === 0) return null;
 
   return (
     <div
-      className={`relative w-full overflow-hidden py-12 outline-none ${className}`}
+      // On mobile the section has 24px side padding. Bleed out of it so the
+      // cards behind the active one can peek in from the screen edges.
+      className={`relative -mx-6 overflow-hidden py-12 outline-none md:mx-0 ${className}`}
       role="region"
       aria-roledescription="carousel"
       aria-label="Carousel"
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >
-      <div className="relative flex h-[480px] w-full items-center justify-center md:h-[550px]">
+      <div
+        ref={stageRef}
+        // --carousel-offset = how far (as % of card width) the cards behind
+        // the active one are pushed sideways. Smaller on mobile so they tuck
+        // in behind the active card and peek out at the edges.
+        className={`relative flex h-[480px] w-full items-center justify-center [--carousel-offset:95%] md:h-[550px] md:[--carousel-offset:105%] ${
+          pillDirection !== null ? 'md:cursor-none' : ''
+        }`}
+        onMouseEnter={updatePill}
+        onMouseMove={updatePill}
+        onMouseLeave={() => setPillDirection(null)}
+        onClick={handleStageClick}
+      >
         {items.map((item, index) => {
           const position = getPosition(index);
           const isCenter = position === 0;
-          const isVisible = Math.abs(position) <= 1;
-          const isHovered = hoveredCardIndex === index;
+          const isSide = Math.abs(position) === 1;
 
-          let x = 0;
+          // Position is expressed in CSS (not JS) so mobile / desktop can use
+          // different offsets without a re-render flash after hydration.
+          let offsetMultiplier = 0;
           let scale = 1;
           let opacity = 1;
-          let zIndex = 10;
-          if (position === 0) {
-            x = 0;
-            scale = 1;
-            opacity = 1;
-            zIndex = 20;
-          } else if (position === 1 || position === -1) {
-            x = position * 105;
-            scale = 0.85;
+          let zIndex = 20;
+
+          if (isSide) {
+            offsetMultiplier = position;
+            scale = SIDE_SCALE;
             opacity = 0.5;
             zIndex = 10;
-          } else {
-            x = position > 0 ? 200 : -200;
+          } else if (!isCenter) {
+            offsetMultiplier = position > 0 ? 2 : -2;
             scale = 0.7;
             opacity = 0;
             zIndex = 0;
@@ -350,22 +285,20 @@ export function InteractiveCarousel({
             isValidElement(item) && item.key != null ? item.key : index;
 
           return (
-            <motion.div
+            <div
               key={key}
-              initial={false}
-              animate={{ x: `${x}%`, scale, opacity }}
-              transition={{
-                duration: SLIDE_MS / 1000,
-                ease: [0.32, 0.72, 0, 1],
-              }}
-              className="absolute h-full w-[80vw] md:w-[420px]"
-              style={{
-                originX: 0.5,
-                originY: 0.5,
-                zIndex,
-                pointerEvents: isVisible ? 'auto' : 'none',
-              }}
+              ref={index === 0 ? slotRef : undefined}
+              data-carousel-slot
+              data-position={position}
               aria-hidden={!isCenter}
+              className="absolute h-full w-[76vw] max-w-[380px] will-change-transform motion-reduce:transition-none md:w-[420px] md:max-w-none"
+              style={{
+                transform: `translateX(calc(var(--carousel-offset) * ${offsetMultiplier})) scale(${scale})`,
+                opacity,
+                zIndex,
+                pointerEvents: isSide || isCenter ? 'auto' : 'none',
+                transition: `transform ${SLIDE_MS}ms cubic-bezier(0.32, 0.72, 0, 1), opacity ${SLIDE_MS}ms cubic-bezier(0.32, 0.72, 0, 1)`,
+              }}
             >
               <motion.div
                 drag={isCenter && length > 1 ? 'x' : false}
@@ -374,49 +307,30 @@ export function InteractiveCarousel({
                 onDragStart={handleDragStart}
                 onDrag={handleDrag}
                 onDragEnd={handleDragEnd}
-                onMouseEnter={(event) => handleCardMouseEnter(event, index)}
-                onMouseLeave={() => handleCardMouseLeave(index)}
-                onMouseMove={(event) => handleCardMouseMove(event, index)}
-                onClick={(event) => handleCardClick(event, index, position)}
-                data-interactive-carousel-card
-                data-carousel-index={index}
-                className={`relative h-full w-full ${
-                  isHovered && isDesktop() ? 'md:cursor-none' : ''
-                } ${!isCenter ? 'cursor-pointer' : ''}`}
+                className="relative h-full w-full"
               >
                 {item}
-
-                {/*
-                 * IMPORTANT:
-                 * The navigation pill exists INSIDE EVERY CARD, not only the
-                 * original primary card. Whichever visible card is hovered
-                 * gets the pill, so it follows the card through the carousel.
-                 */}
-                {length > 1 && (
-                  <motion.div
-                    style={{
-                      left: smoothCursorX,
-                      top: smoothCursorY,
-                    }}
-                    initial={false}
-                    animate={{
-                      opacity: isHovered && !isDragging ? 1 : 0,
-                      scale: isHovered && !isDragging ? 1 : 0.92,
-                    }}
-                    transition={{
-                      duration: 0.16,
-                      ease: 'easeOut',
-                    }}
-                    className="pointer-events-none absolute z-30 hidden h-9 w-[86px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/60 bg-stone-100/90 px-3 text-[11px] font-semibold tracking-tight text-stone-700 shadow-[inset_2px_2px_5px_rgba(255,255,255,0.95),inset_-2px_-2px_5px_rgba(0,0,0,0.12),2px_3px_8px_rgba(0,0,0,0.12)] backdrop-blur-sm md:flex"
-                    aria-hidden="true"
-                  >
-                    {cursorDirection === 'next' ? 'Next →' : '← Prev'}
-                  </motion.div>
-                )}
               </motion.div>
-            </motion.div>
+            </div>
           );
         })}
+
+        {/* The single Next / Prev pill (desktop only). */}
+        {length > 1 && (
+          <motion.div
+            style={{ left: smoothPillX, top: smoothPillY }}
+            initial={false}
+            animate={{
+              opacity: pillDirection !== null && !isDragging ? 1 : 0,
+              scale: pillDirection !== null && !isDragging ? 1 : 0.92,
+            }}
+            transition={{ duration: 0.16, ease: 'easeOut' }}
+            className="pointer-events-none absolute z-40 hidden h-9 w-[86px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-terracotta px-3 text-[11px] font-semibold tracking-tight text-white shadow-[0_6px_16px_rgba(200,80,26,0.35),inset_0_1px_0_rgba(255,255,255,0.25)] md:flex"
+            aria-hidden="true"
+          >
+            {pillDirection === 'prev' ? '← Prev' : 'Next →'}
+          </motion.div>
+        )}
       </div>
     </div>
   );

@@ -213,7 +213,7 @@ export default function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/80 to-stone-900/20"></div>
                 </div>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-terracotta/60 opacity-50 group-hover:opacity-100 transition-opacity z-10"></div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-terracotta/60 opacity-100 md:opacity-50 md:group-hover:opacity-100 transition-opacity z-10"></div>
                 <div className="relative z-10 p-5 md:p-8 flex flex-col h-full justify-end text-left">
                   <div className="text-terracotta font-display font-bold text-2xl mb-4">{card.num}</div>
                   <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-white">{card.title}</h3>
@@ -292,7 +292,7 @@ export default function Home() {
                 </div>
                 <div className="relative z-10 p-5 md:p-8 lg:p-10 flex flex-col flex-grow bg-white text-left ">
                   <div className="text-terracotta font-display font-bold text-2xl mb-2 transition-transform duration-300 group-hover:translate-x-1">{dim.id}</div>
-                  <h3 className="text-xl md:text-xl md:text-2xl font-display font-bold mb-3 text-stone-900">{dim.name}</h3>
+                  <h3 className="text-xl md:text-xl font-display font-bold mb-3 text-stone-900">{dim.name}</h3>
                   <p className="text-stone-600 text-[15px] leading-relaxed line-clamp-4 md:line-clamp-none ">{dim.desc}</p>
                 </div>
               </AnimatedCard>
@@ -373,7 +373,7 @@ export default function Home() {
                     referrerPolicy="no-referrer"
                   />
                 </div>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-stone-200 to-transparent group-hover:from-terracotta transition-colors duration-500 z-20"></div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-transparent md:from-stone-200 md:group-hover:from-terracotta transition-colors duration-500 z-20"></div>
                 <div className="relative z-10 p-5 md:p-8 flex flex-col flex-grow bg-white text-left">
                   <div className="mb-4 flex justify-between items-start">
                     {mod.live ? (
