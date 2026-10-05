@@ -1,6 +1,6 @@
 {
   "name": "bẹrẹ Landing Page",
-  "description": "An AI-powered Startup Intelligence and Sustainability Platform for African founders.",
+  "description": "We help African Founders make data-driven decisions with our startup intelligence tool.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
