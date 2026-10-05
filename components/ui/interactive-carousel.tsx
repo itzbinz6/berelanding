@@ -36,6 +36,7 @@ export function InteractiveCarousel({
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const normalizedIndex = length > 0 ? currentIndex % length : 0;
 
   // null = pointer is not over any card, so the Next/Prev pill is hidden.
   const [pillDirection, setPillDirection] = useState<Direction | null>(null);
@@ -65,12 +66,6 @@ export function InteractiveCarousel({
     setCurrentIndex((prev) => (prev + 1) % length);
   }, [length]);
 
-  useEffect(() => {
-    if (length > 0 && currentIndex >= length) {
-      setCurrentIndex(0);
-    }
-  }, [length, currentIndex]);
-
   // Pause autoplay while the pointer is over the carousel or while dragging.
   const isPaused = pillDirection !== null || isDragging;
 
@@ -79,11 +74,11 @@ export function InteractiveCarousel({
 
     const timer = window.setTimeout(goToNext, AUTOPLAY_MS);
     return () => window.clearTimeout(timer);
-  }, [length, currentIndex, isPaused, goToNext]);
+  }, [length, normalizedIndex, isPaused, goToNext]);
 
   const getPosition = (index: number) => {
     const half = Math.floor(length / 2);
-    let diff = (index - currentIndex) % length;
+    let diff = (index - normalizedIndex) % length;
 
     if (diff < -half) diff += length;
     if (diff > half) diff -= length;
