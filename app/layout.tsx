@@ -30,7 +30,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: 'Bere | Startup Intelligence Tool for African Founders',
   description: 'We help African Founders make data-driven decisions with our startup intelligence tool.',
-  metadataBase: new URL('https://techeet.online'),
+  metadataBase: new URL('https://www.bere.africa/'),
   alternates: {
     canonical: 'https://www.bere.africa/',
   },
@@ -41,12 +41,12 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    url: 'https://techeet.online/',
+    url: 'https://www.bere.africa/',
     title: 'Bere | Startup Intelligence Tool for African Founders',
     description: 'We help African Founders make data-driven decisions with our startup intelligence tool.',
     images: [
       {
-        url: 'https://techeet.online/social-preview.png',
+        url: 'https://www.bere.africa/social-preview.png',
         width: 1200,
         height: 630,
         alt: 'Bere | Startup Intelligence Tool for African Founders',
