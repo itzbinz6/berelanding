@@ -196,7 +196,7 @@ export default function Home() {
             </p>
           </AnimatedSection>
 
-          <InteractiveCarousel>
+          <InteractiveCarousel tone="dark">
             {t.problem.cards.map((card, i) => (
               <AnimatedSection
                 key={card.num}
@@ -213,11 +213,11 @@ export default function Home() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/80 to-stone-900/20"></div>
                 </div>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-terracotta/60 opacity-100 md:opacity-50 md:group-hover:opacity-100 transition-opacity z-10"></div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-terracotta/60 opacity-0 group-data-[active=true]/slide:opacity-100 transition-opacity duration-500 z-10"></div>
                 <div className="relative z-10 p-5 md:p-8 flex flex-col h-full justify-end text-left">
                   <div className="text-terracotta font-display font-bold text-2xl mb-4">{card.num}</div>
                   <h3 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-white">{card.title}</h3>
-                  <p className="text-stone-400 leading-relaxed text-sm md:text-lg line-clamp-4 md:line-clamp-none">
+                  <p className="text-stone-400 leading-relaxed text-sm md:text-lg ">
                     {card.desc}
                   </p>
                 </div>
@@ -245,7 +245,8 @@ export default function Home() {
                 delay={0.08 + i * 0.08}
                 className="relative bg-white rounded-2xl border border-stone-200/80 shadow-sm sm:shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full"
               >
-                <div className="relative h-[40%] sm:h-[42%] md:h-[45%] w-full shrink-0 overflow-hidden bg-stone-100">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-terracotta/60 opacity-0 group-data-[active=true]/slide:opacity-100 transition-opacity duration-500 z-20"></div>
+                <div className="relative h-44 sm:h-48 md:h-56 w-full shrink-0 overflow-hidden bg-stone-100">
                   <Image
                     src={SOLUTION_IMAGES[i]}
                     fill
@@ -254,10 +255,10 @@ export default function Home() {
                     referrerPolicy="no-referrer"
                   />
                 </div>
-                <div className="relative z-10 p-5 sm:p-6 md:p-8 flex flex-col flex-grow bg-white text-left">
+                <div className="relative z-10 p-5 sm:p-6 md:p-8 flex flex-col flex-grow gap-0 bg-white text-left">
                   <div className="text-xs font-bold uppercase tracking-wider text-terracotta mb-3 md:mb-4">{card.tag}</div>
                   <h3 className="text-[1.4rem] sm:text-2xl font-display font-bold leading-tight mb-3">{card.title}</h3>
-                  <p className="text-stone-600 leading-[1.65] text-[15px] line-clamp-4 md:line-clamp-none">
+                  <p className="text-stone-600 leading-[1.65] text-[15px] ">
                     {card.desc}
                   </p>
                 </div>
@@ -281,7 +282,8 @@ export default function Home() {
           <InteractiveCarousel>
             {t.framework.dims.map((dim, i) => (
               <AnimatedCard key={dim.id} delay={i * 0.08} className="relative bg-white rounded-2xl border border-stone-200/80 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full">
-                <div className="relative h-[38%] md:h-[45%] w-full shrink-0 overflow-hidden bg-stone-100">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-terracotta/60 opacity-0 group-data-[active=true]/slide:opacity-100 transition-opacity duration-500 z-20"></div>
+                <div className="relative h-44 sm:h-48 md:h-56 w-full shrink-0 overflow-hidden bg-stone-100">
                   <Image
                     src={FRAMEWORK_IMAGES[i]}
                     fill
@@ -293,7 +295,7 @@ export default function Home() {
                 <div className="relative z-10 p-5 md:p-8 lg:p-10 flex flex-col flex-grow bg-white text-left ">
                   <div className="text-terracotta font-display font-bold text-2xl mb-2 transition-transform duration-300 group-hover:translate-x-1">{dim.id}</div>
                   <h3 className="text-xl md:text-xl font-display font-bold mb-3 text-stone-900">{dim.name}</h3>
-                  <p className="text-stone-600 text-[15px] leading-relaxed line-clamp-4 md:line-clamp-none ">{dim.desc}</p>
+                  <p className="text-stone-600 text-[15px] leading-relaxed ">{dim.desc}</p>
                 </div>
               </AnimatedCard>
             ))}
@@ -364,7 +366,7 @@ export default function Home() {
                 delay={i * 0.08}
                 className="relative bg-white rounded-2xl border border-stone-200/80 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full w-full"
               >
-                <div className="relative h-[38%] md:h-[45%] w-full shrink-0 overflow-hidden bg-stone-100">
+                <div className="relative h-44 sm:h-48 md:h-56 w-full shrink-0 overflow-hidden bg-stone-100">
                   <Image
                     src={MODULE_IMAGES[i]}
                     fill
@@ -373,7 +375,7 @@ export default function Home() {
                     referrerPolicy="no-referrer"
                   />
                 </div>
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-transparent md:from-stone-200 md:group-hover:from-terracotta transition-colors duration-500 z-20"></div>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-terracotta to-terracotta/60 opacity-0 group-data-[active=true]/slide:opacity-100 transition-opacity duration-500 z-20"></div>
                 <div className="relative z-10 p-5 md:p-8 flex flex-col flex-grow bg-white text-left">
                   <div className="mb-4 flex justify-between items-start">
                     {mod.live ? (
@@ -388,7 +390,7 @@ export default function Home() {
                     )}
                   </div>
                   <h3 className="text-xl md:text-2xl font-display font-bold mb-3">{mod.name}</h3>
-                  <p className="text-stone-600 text-[15px] leading-relaxed line-clamp-4 md:line-clamp-none">{mod.desc}</p>
+                  <p className="text-stone-600 text-[15px] leading-relaxed ">{mod.desc}</p>
                 </div>
               </AnimatedCard>
             ))}
