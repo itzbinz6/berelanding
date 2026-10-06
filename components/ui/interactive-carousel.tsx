@@ -113,10 +113,13 @@ export function InteractiveCarousel({
     setCurrentIndex((prev) => (prev + 1) % length);
   }, [length]);
 
-<<<<<<< HEAD
   useEffect(() => {
     if (length > 0 && currentIndex >= length) setCurrentIndex(0);
   }, [length, currentIndex]);
+
+  // Keeps the active index inside 0..length-1 (also safe for negatives and
+  // for the one render where `length` shrinks before the effect above runs).
+  const normalizedIndex = length > 0 ? ((currentIndex % length) + length) % length : 0;
 
   const getPosition = (index: number) => {
     const half = Math.floor(length / 2);
