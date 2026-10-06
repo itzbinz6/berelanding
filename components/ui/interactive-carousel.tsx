@@ -81,6 +81,7 @@ export function InteractiveCarousel({
   const [isPressed, setIsPressed] = useState(false);
   const [cursorDirection, setCursorDirection] = useState<'prev' | 'next'>('next');
 
+
   const stageRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const lastPointerRef = useRef({ x: 0, y: 0 });
@@ -112,13 +113,14 @@ export function InteractiveCarousel({
     setCurrentIndex((prev) => (prev + 1) % length);
   }, [length]);
 
+<<<<<<< HEAD
   useEffect(() => {
     if (length > 0 && currentIndex >= length) setCurrentIndex(0);
   }, [length, currentIndex]);
 
   const getPosition = (index: number) => {
     const half = Math.floor(length / 2);
-    let diff = (index - currentIndex) % length;
+    let diff = (index - normalizedIndex) % length;
 
     if (diff < -half) diff += length;
     if (diff > half) diff -= length;

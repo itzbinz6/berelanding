@@ -1,8 +1,10 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
 
 @theme {
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  --font-script: var(--font-script), cursive;
   /* Brand accent colors — used sparingly as accents only, not full backgrounds */
   --color-cream: #F5EFE6;
   --color-ink: #2C1A0E;
